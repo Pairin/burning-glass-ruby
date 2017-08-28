@@ -2,6 +2,7 @@ require 'json'
 
 module BurningGlass
   class Client
+    SUCCESSFUL_REQUEST_VALUE = 'success'.freeze
 
     def initialize(opts)
       @opts = opts
@@ -17,7 +18,12 @@ module BurningGlass
       if response.code != '200'
         report_api_error!(response)
       else
-        response = JSON.parse(response)
+        response_body = JSON.parse(response.body)
+        if response_body['status'] != SUCCESSFUL_REQUEST_VALUE
+          report_api_error!(response)
+        else
+          response_body
+        end
       end
     end
 
