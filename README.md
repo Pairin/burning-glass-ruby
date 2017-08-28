@@ -24,5 +24,10 @@ The minimum requirements to access Burning Glass APIs are a `Consumer Key` and a
     # for explorer API
     options.explorer_token = 'EXPLORERAPITOKEN'
     options.explorer_secret = 'EXPLORERAPISECRET'
+
+    # requests default to sandbox API endpoints. Set production to true if
+    # you want production APIs 
+    options.production = true
+
   end
 ```

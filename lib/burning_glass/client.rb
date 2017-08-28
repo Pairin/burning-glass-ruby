@@ -2,7 +2,10 @@ require 'json'
 
 module BurningGlass
   class Client
+
     SUCCESSFUL_REQUEST_VALUE = 'success'.freeze
+    SANDBOX_URL = 'http://sandbox.api.burning-glass.com'.freeze
+    PRODUCTION_URL = 'http://api.burning-glass.com'.freeze
 
     def initialize(opts)
       @opts = opts
@@ -12,7 +15,7 @@ module BurningGlass
       request_options = opts(url)
       validate_configuration!(request_options)
 
-      requester = Util::Requester.new(method, url, params, request_options)
+      requester = Util::Requester.new(method, full_url(url), params, request_options)
       response = requester.call
 
       if response.code != '200'
@@ -69,6 +72,14 @@ module BurningGlass
 
     def report_api_error!(response)
       raise APIError.new(response.code, response.message, response.body)
+    end
+
+    def full_url(url)
+      if @opts.production
+        PRODUCTION_URL + url
+      else
+        SANDBOX_URL + url
+      end
     end
 
   end

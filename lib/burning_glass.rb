@@ -8,6 +8,7 @@ require 'burning_glass/errors'
 require 'burning_glass/options'
 require 'burning_glass/client'
 
+require 'burning_glass/api_resource'
 require 'burning_glass/insight'
 require 'burning_glass/explorer'
 
