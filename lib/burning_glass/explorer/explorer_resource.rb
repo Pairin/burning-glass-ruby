@@ -4,6 +4,9 @@ module BurningGlass
       URL_BASE = '/v207/explorer/'.freeze
       RELATIONAL_VALUE_REGEX = /(\/[a-z]+\/[0-9]+\/[a-z]+)/
 
+      extend Actions::Gettable
+      extend Actions::Relatable
+
       class << self
 
         def url_base
@@ -39,10 +42,6 @@ module BurningGlass
               value
             end
           end
-        end
-
-        def has_many(method_name, opts={})
-          define_relational_method(method_name)
         end
 
       end

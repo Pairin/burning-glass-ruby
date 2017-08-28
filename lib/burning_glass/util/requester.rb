@@ -18,14 +18,14 @@ module BurningGlass
         http = Net::HTTP.new(@uri.host, @uri.port)
         http.use_ssl = @uri.scheme == 'https'
         request = build_request
-        request.body = @params.to_json
+        request.body = @params.to_json if [:post, :put].include?(@method)
         http.request(request)
       end
 
       private
 
       def build_request
-        request = request_method_class.new(URI.parse(@url).request_uri)
+        request = request_method_class.new(uri_with_params.request_uri)
         request['Accept'] = 'application/json'
         request['Content-Type'] = 'application/json'
         request['Authorization'] = "OAuth #{authorization_header(@uri.query)}"
@@ -47,6 +47,10 @@ module BurningGlass
           groups = q.split("=")
           "#{groups[0]}=\"#{groups[1]}\""
         end.join(",")
+      end
+
+      def uri_with_params
+        URI.parse(@url + '?' + hash_to_query_string(@params))
       end
 
     end

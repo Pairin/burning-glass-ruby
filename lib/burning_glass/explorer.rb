@@ -4,6 +4,7 @@ require 'burning_glass/explorer/occupation'
 require 'burning_glass/explorer/degree'
 require 'burning_glass/explorer/job_industry'
 require 'burning_glass/explorer/skill'
+require 'burning_glass/explorer/state_area'
 
 module BurningGlass
   module Explorer
