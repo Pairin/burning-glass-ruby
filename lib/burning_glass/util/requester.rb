@@ -24,21 +24,28 @@ module BurningGlass
       private
 
       def build_request
-        request = request_method_class.new(@uri.request_uri)
+        request = request_method_class.new(URI.parse(@url).request_uri)
         request['Accept'] = 'application/json'
         request['Content-Type'] = 'application/json'
-        request['Authorization'] = "OAuth #{@uri.query.gsub('&', ',')}"
+        request['Authorization'] = "OAuth #{authorization_header(@uri.query)}"
         request
       end
 
       def request_url
-        helper = Util::OauthHelper.new(@method, @url, {}, @opts)
+        helper = Util::OauthHelper.new(@method, @url, @params, @opts)
         helper.full_url
       end
 
       def request_method_class
         method = @method.to_s.downcase.capitalize
         Util::StringHelper.constantize("Net::HTTP::#{method}")
+      end
+
+      def authorization_header(query_string)
+        query_string.split("&").map do |q|
+          groups = q.split("=")
+          "#{groups[0]}=\"#{groups[1]}\""
+        end.join(",")
       end
 
     end
