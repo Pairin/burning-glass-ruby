@@ -1,5 +1,8 @@
 
 require 'burning_glass/explorer/explorer_resource'
+
+require 'burning_glass/criteria/occupation'
+
 require 'burning_glass/explorer/occupation'
 require 'burning_glass/explorer/degree'
 require 'burning_glass/explorer/job_industry'

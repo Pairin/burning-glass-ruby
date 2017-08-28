@@ -13,10 +13,8 @@ module BurningGlass
         end
       end
 
-      def get_by_criteria(criteria_name)
-        accepted_parameters = constantize(
-          "BurningGlass::Criteria::#{criteria_name.capitalize}"
-        ).accepted_parameters
+      def get_by_criteria(*criteria_name)
+        accepted_parameters = merge_criteria_params(criteria_name)
 
         define_singleton_method(:get) do |params={}|
           params.select!{ |k,v| accepted_parameters.include?(k.to_s) }
@@ -24,6 +22,19 @@ module BurningGlass
           parse_multiple_resources(response['data'])
         end
 
+      end
+
+      private
+
+      def merge_criteria_params(criteria_names)
+        criteria_names.inject([]) do |summ, c_name|
+          critera_acceptance = constantize(
+            "BurningGlass::Criteria::#{camelize(c_name.to_s)}"
+          ).accepted_parameters
+
+          summ.concat(critera_acceptance)
+          summ
+        end
       end
 
     end
