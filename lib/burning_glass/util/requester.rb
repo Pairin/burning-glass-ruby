@@ -4,6 +4,7 @@ require 'json'
 module BurningGlass
   module Util
     class Requester
+      include StringHelper
 
       def initialize(method, url, params={}, opts={})
         @method = method
@@ -38,7 +39,7 @@ module BurningGlass
 
       def request_method_class
         method = @method.to_s.downcase.capitalize
-        Util::StringHelper.constantize("Net::HTTP::#{method}")
+        constantize("Net::HTTP::#{method}")
       end
 
       def authorization_header(query_string)

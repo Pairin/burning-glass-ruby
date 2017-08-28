@@ -4,6 +4,14 @@ module BurningGlass
 
       URL_BASE = '/v205/insight/'.freeze
 
+      class << self
+
+        def url_base
+          URL_BASE
+        end
+
+      end
+      
     end
   end
 end
