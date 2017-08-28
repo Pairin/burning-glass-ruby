@@ -8,6 +8,8 @@ require 'burning_glass/errors'
 require 'burning_glass/options'
 require 'burning_glass/client'
 
+require 'burning_glass/criteria/pagination'
+
 require 'burning_glass/actions/gettable'
 require 'burning_glass/actions/relatable'
 

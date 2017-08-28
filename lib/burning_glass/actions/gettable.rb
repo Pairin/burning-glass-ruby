@@ -13,6 +13,19 @@ module BurningGlass
         end
       end
 
+      def get_by_criteria(criteria_name)
+        accepted_parameters = constantize(
+          "BurningGlass::Criteria::#{criteria_name.capitalize}"
+        ).accepted_parameters
+
+        define_singleton_method(:get) do |params={}|
+          params.select!{ |k,v| accepted_parameters.include?(k.to_s) }
+          response = deliver_request(:get, "#{resource_name.to_s.plural}", params)
+          parse_multiple_resources(response['data'])
+        end
+
+      end
+
     end
   end
 end
