@@ -14,7 +14,7 @@ module BurningGlass
 
     class << self
 
-      REQUIREMENTS = %w(consumer_key consumer_secret explorer_token explorer_secret)
+      REQUIREMENTS = %w(consumer_key consumer_secret token token_secret)
 
       def requirements
         REQUIREMENTS

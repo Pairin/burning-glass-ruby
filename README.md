@@ -9,24 +9,28 @@ This gem is for accessing multiple Burning Glass APIs. Currently the Explorer & 
 ```
 
 ## Configuration
-
-The minimum requirements to access Burning Glass APIs are a `Consumer Key` and a `Consumer Secret`. Each separate Burning Glass API Product has its own `Token` and `Token Secret`.
+Each separate Burning Glass API Product has its own `Consumer Key`, `Consumer Secret`, `Token`, and `Token Secret`. Each API accepts it's own hash of parameters.
 
 ```ruby
   BurningGlass.configure do |options|
-    options.consumer_key = 'CONSUMER_KEY'
-    options.consumer_secret = 'CONSUMER_SECRET'
 
     # for insight API
-    options.insight_token = 'INSIGHTAPITOKEN'
-    options.insight_secret = 'INSIGHTAPISECRET'
+    options.insight = {
+      consumer_key: 'INSIGHTCONSUMERKEY',
+      consumer_secret: 'INSIGHTCONSUMERSECRET',
+      token: 'INSIGHTAPITOKEN',
+      token_secret: 'INSIGHTAPISECRET'
+    }
 
     # for explorer API
-    options.explorer_token = 'EXPLORERAPITOKEN'
-    options.explorer_secret = 'EXPLORERAPISECRET'
-
+    options.explorer = {
+      consumer_key: 'EXPLORERCONSUMERKEY',
+      consumer_secret: 'EXPLORERCONSUMERSECRET',
+      token: 'EXPLORERAPITOKEN',
+      token_secret: 'EXPLORERAPISECRET'
+    }
     # requests default to sandbox API endpoints. Set production to true if
-    # you want production APIs 
+    # you want production APIs
     options.production = true
 
   end

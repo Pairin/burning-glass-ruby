@@ -2,6 +2,7 @@ require 'json'
 
 module BurningGlass
   class Client
+    include Util::StringHelper
 
     SUCCESSFUL_REQUEST_VALUE = 'success'.freeze
     SANDBOX_URL = 'http://sandbox.api.burning-glass.com'.freeze
@@ -33,32 +34,27 @@ module BurningGlass
     private
 
     def opts(url)
-      determine_requirements(url).inject({}) do |summ, key|
-        summ[translated_key(key)] = @opts[key]
+      api_product = determine_product(url)
+
+      requirements(api_product).inject({}) do |summ, key|
+        summ[key.to_sym] = (@opts[api_product] || {} )[key]
         summ
       end
     end
 
-    def determine_requirements(url)
+    def determine_product(url)
       case url
       when /\/insight\//
-        Insight.requirements
+        :insight
       when /\/explorer\//
-        Explorer.requirements
+        :explorer
       else
         raise Error.new("The product you're attempting to access isn't supported")
       end
     end
 
-    def translated_key(key)
-      case key.to_s
-      when /(insight|explorer)_secret/
-        :token_secret
-      when /(insight|explorer)_token/
-        :token
-      else
-        key.to_sym
-      end
+    def requirements(product)
+      constantize("BurningGlass::#{product.to_s.capitalize}").requirements
     end
 
     def validate_configuration!(config)

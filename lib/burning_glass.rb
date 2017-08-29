@@ -36,7 +36,8 @@ module BurningGlass
     end
 
     def clear
-      [@opts, @client].each{ |att| att = nil }
+      @opts = nil
+      @client = nil
     end
 
   end
