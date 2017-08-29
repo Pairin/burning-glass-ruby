@@ -37,7 +37,8 @@ module BurningGlass
 
             begin
               klass = constantize(camelize(klass_name))
-              klass.get_by_occupation_id(integer_id)
+              instance_name = "@#{name}"
+              instance_variable_get(instance_name) || instance_variable_set("@#{name}", klass.get_by_occupation_id(integer_id))
             rescue NameError
               value
             end
