@@ -14,10 +14,11 @@ module BurningGlass
       end
 
       def get_by_criteria(*criteria_name)
-        accepted_parameters = merge_criteria_params(criteria_name)
+        accepted_params = merge_criteria_params(criteria_name)
 
         define_singleton_method(:get) do |params={}|
-          params.select!{ |k,v| accepted_parameters.include?(k.to_s) }
+          validate_and_filter_params!(accepted_params, params)
+
           response = deliver_request(:get, "#{resource_name.to_s.plural}", params)
           parse_multiple_resources(response['data'])
         end
@@ -25,6 +26,19 @@ module BurningGlass
       end
 
       private
+
+      def validate_and_filter_params!(accepted_params, params)
+        required_params = accepted_params.select{ |p| p[0] == '!' }
+        true_name_requirements = (required_params || []).map{ |p| p[1..-1] }
+        missing_reqs = true_name_requirements.select{ |req| !params.keys.include?(req.to_sym) }
+
+        if missing_reqs.empty?
+          accepted_params.concat(true_name_requirements)
+          params.select!{ |k,v| accepted_params.include?(k.to_s) }
+        else
+          raise Error.new("Required parameters for this request missing (#{missing_reqs.join(" ")})")
+        end
+      end
 
       def merge_criteria_params(criteria_names)
         criteria_names.inject([]) do |summ, c_name|

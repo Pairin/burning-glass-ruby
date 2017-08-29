@@ -5,7 +5,11 @@ module BurningGlass
       class << self
 
         def accepted_parameters
-          ['areaId']
+          %w(
+            !areaId careerAreaId careerAreaJobTitle occupationGroupId
+            employerId primaryJobId firstStep starterJob specializedTraining
+            occupationIds
+          )
         end
 
       end
