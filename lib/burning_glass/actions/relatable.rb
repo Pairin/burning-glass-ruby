@@ -10,7 +10,8 @@ module BurningGlass
 
       def belongs_to(parent_name, params={})
         prepended_name = "get_by_#{parent_name}_id".to_sym
-        url_path = "#{parent_name.to_s.plural}/:id/#{resource_name.plural}"
+        
+        url_path = "#{parent_name.to_s.plural}/:id/#{params[:resource_name] || resource_name.plural}"
 
         finders = ['data'].concat(params[:resource_key] || [])
 

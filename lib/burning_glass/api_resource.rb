@@ -14,7 +14,7 @@ module BurningGlass
       end
 
       def resource_name
-        name.match(/([A-z]+\z)/)
+        underscore(name).match(/([A-z]+\z)/)
         $1.downcase
       end
 

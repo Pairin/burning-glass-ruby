@@ -5,6 +5,7 @@ module BurningGlass
       get_by :id
       get_by_criteria :occupation, :pagination
       has_many :skills
+      has_many :similar_occupations
 
     end
   end
