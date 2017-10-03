@@ -11,7 +11,7 @@ module BurningGlass
         end
 
       end
-      
+
     end
   end
 end

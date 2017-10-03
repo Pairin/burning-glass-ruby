@@ -1,6 +1,10 @@
 
 require 'burning_glass/insight/insight_resource'
 
+require 'burning_glass/criteria/job_report'
+
+require 'burning_glass/insight/job_posting'
+
 module BurningGlass
   module Insight
 

@@ -18,7 +18,7 @@ module BurningGlass
         http = Net::HTTP.new(@uri.host, @uri.port)
         http.use_ssl = @uri.scheme == 'https'
         request = build_request
-        request.body = @params.to_json if [:post, :put].include?(@method)
+        request.body = @params.to_json if body_params?
         http.request(request)
       end
 
@@ -33,7 +33,9 @@ module BurningGlass
       end
 
       def request_url
-        helper = Util::OauthHelper.new(@method, @url, @params, @opts)
+        params = body_params? ? {} : @params
+
+        helper = Util::OauthHelper.new(@method, @url, params, @opts)
         helper.full_url
       end
 
@@ -45,12 +47,24 @@ module BurningGlass
       def authorization_header(query_string)
         query_string.split("&").map do |q|
           groups = q.split("=")
-          "#{groups[0]}=\"#{groups[1]}\""
-        end.join(",")
+          if groups[0].include?('oauth')
+            "#{groups[0]}=\"#{groups[1]}\""
+          else
+            nil
+          end
+        end.compact.join(",")
       end
 
       def uri_with_params
-        URI.parse(@url + '?' + hash_to_query_string(@params))
+        if body_params?
+          URI.parse(@url)
+        else
+          URI.parse(@url + '?' + hash_to_query_string(@params))
+        end
+      end
+
+      def body_params?
+        [:post, :put].include?(@method)
       end
 
     end

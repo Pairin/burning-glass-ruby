@@ -8,7 +8,13 @@ module BurningGlass
 
       def hash_to_query_string(params)
         params.map do |k, v|
-          "#{k}=#{v}"
+          if v.is_a?(Hash)
+            v.map do |sk, sv|
+              "#{k}[#{sk}]=#{sv}"
+            end.join("&")
+          else
+            "#{k}=#{v}"
+          end
         end.join("&")
       end
 

@@ -16,11 +16,16 @@ module BurningGlass
       def get_by_criteria(*criteria_name)
         accepted_params = merge_criteria_params(criteria_name)
 
-        define_singleton_method(:get) do |params={}|
-          validate_and_filter_params!(accepted_params, params)
+        method = accepted_params[:options][:method] || :get
+        resource_path = accepted_params[:options][:path] || 'data'
 
-          response = deliver_request(:get, "#{resource_name.to_s.plural}", params)
-          parse_multiple_resources(response['data'])
+        define_singleton_method(:get) do |params={}|
+          validate_and_filter_params!(accepted_params[:acceptance], params)
+
+          response = deliver_request(method, "#{resource_name.to_s.plural}", params)
+          returned_resource = resource_path.is_a?(Array) ? response.dig(*resource_path) : response.dig(resource_path)
+
+          parse_multiple_resources(returned_resource)
         end
 
       end
@@ -41,12 +46,16 @@ module BurningGlass
       end
 
       def merge_criteria_params(criteria_names)
-        criteria_names.inject([]) do |summ, c_name|
-          critera_acceptance = constantize(
-            "BurningGlass::Criteria::#{camelize(c_name.to_s)}"
-          ).accepted_parameters
+        criteria_names.inject({acceptance: [], options: {}}) do |summ, c_name|
+          if c_name.is_a?(Hash)
+            summ[:options].merge!(c_name)
+          else
+            critera_acceptance = constantize(
+              "BurningGlass::Criteria::#{camelize(c_name.to_s)}"
+            ).accepted_parameters
 
-          summ.concat(critera_acceptance)
+            summ[:acceptance].concat(critera_acceptance)
+          end
           summ
         end
       end

@@ -18,6 +18,33 @@ module BurningGlass
         $1.downcase
       end
 
+      def parse_singular_resource(resource_data)
+        new(resource_data)
+      end
+
+      def parse_multiple_resources(resources_data)
+        resources_data.map{ |rd| parse_singular_resource(rd) }
+      end
+
+    end
+
+    def initialize(data={})
+      set_accessors(data)
+    end
+
+    private
+
+    def metaclass
+      class << self; self; end
+    end
+
+    def set_accessors(data)
+      data.each do |(k,v)|
+        metaclass.instance_eval do
+          method_name = underscore(k)
+          define_method(method_name) { v }
+        end
+      end
     end
 
   end

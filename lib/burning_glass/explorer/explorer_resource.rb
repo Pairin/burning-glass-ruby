@@ -13,14 +13,6 @@ module BurningGlass
           URL_BASE
         end
 
-        def parse_singular_resource(resource_data)
-          new(resource_data)
-        end
-
-        def parse_multiple_resources(resources_data)
-          resources_data.map{ |rd| parse_singular_resource(rd) }
-        end
-
         def relational_value?(method_value)
           method_value.is_a?(String) && method_value.match(RELATIONAL_VALUE_REGEX)
         end
@@ -47,19 +39,11 @@ module BurningGlass
 
       end
 
-      def initialize(data={})
-        set_accessors(data)
-      end
-
       def integer_id
         id.scan(/[0-9]+/).first
       end
 
       private
-
-      def metaclass
-        class << self; self; end
-      end
 
       def set_accessors(data)
         data.each do |(k,v)|
