@@ -13,6 +13,11 @@ module BurningGlass
 
       end
 
+      def posting
+        response = self.class.deliver_request(:get, self.class.resource_name.plural, {jobid: self.job_id})
+        response['data']
+      end
+
     end
   end
 end

@@ -19,7 +19,9 @@ module BurningGlass
         method = accepted_params[:options][:method] || :get
         resource_path = accepted_params[:options][:path] || 'data'
 
-        define_singleton_method(:get) do |params={}|
+        singleton_name = determine_criteria_method_name(criteria_name)
+
+        define_singleton_method(singleton_name) do |params={}|
           validate_and_filter_params!(accepted_params[:acceptance], params)
 
           response = deliver_request(method, "#{resource_name.to_s.plural}", params)
@@ -31,6 +33,14 @@ module BurningGlass
       end
 
       private
+
+      def determine_criteria_method_name(criteria_name)
+        if methods.include?(:get)
+          ('get_by_' + criteria_name.join("_and_")).to_sym
+        else
+          :get
+        end
+      end
 
       def validate_and_filter_params!(accepted_params, params)
         required_params = accepted_params.select{ |p| p[0] == '!' }
