@@ -2,7 +2,7 @@
 
 This gem is for accessing multiple Burning Glass APIs. Currently the Explorer & Insight APIs are supported.
 
-REQUIRES RUBY 2.3+
+Tested w/ RUBY 2.2
 
 ## Installation
 

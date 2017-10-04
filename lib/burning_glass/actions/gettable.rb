@@ -25,7 +25,7 @@ module BurningGlass
           validate_and_filter_params!(accepted_params[:acceptance], params)
 
           response = deliver_request(method, "#{resource_name.to_s.plural}", params)
-          returned_resource = resource_path.is_a?(Array) ? response.dig(*resource_path) : response.dig(resource_path)
+          returned_resource = resource_path.is_a?(Array) ? dig(response, resource_path) : response[resource_path]
 
           parse_multiple_resources(returned_resource)
         end
@@ -66,6 +66,13 @@ module BurningGlass
 
             summ[:acceptance].concat(critera_acceptance)
           end
+          summ
+        end
+      end
+
+      def dig(resource_body, path)
+        path.inject(resource_body) do |summ, p|
+          summ = summ[p]
           summ
         end
       end
