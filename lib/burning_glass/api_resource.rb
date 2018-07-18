@@ -22,8 +22,11 @@ module BurningGlass
         new(resource_data)
       end
 
-      def parse_multiple_resources(resources_data)
-        resources_data.map{ |rd| parse_singular_resource(rd) }
+      def parse_multiple_resources(resources_data, metadata)
+        Results.new(
+          resources_data.map{ |rd| parse_singular_resource(rd) },
+          metadata
+        )
       end
 
     end

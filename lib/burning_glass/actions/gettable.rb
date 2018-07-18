@@ -25,9 +25,19 @@ module BurningGlass
           validate_and_filter_params!(accepted_params[:acceptance], params)
 
           response = deliver_request(method, "#{resource_name.to_s.plural}", params)
-          returned_resource = resource_path.is_a?(Array) ? dig(response, resource_path) : response[resource_path]
 
-          parse_multiple_resources(returned_resource)
+          if resource_path.is_a?(Array)
+            returned_resource = dig(response, resource_path)
+            base_data = dig(response, resource_path[0..-2])
+            base_data.delete(resource_path[-1])
+            metadata = base_data
+          else
+            returned_resource = response[resource_path]
+            response.delete(resource_path)
+            metadata = response
+          end
+
+          parse_multiple_resources(returned_resource, metadata)
         end
 
       end

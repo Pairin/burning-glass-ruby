@@ -4,6 +4,7 @@ require 'burning_glass/util/oauth_helper'
 require 'burning_glass/util/string_helper'
 require 'burning_glass/util/requester'
 
+require 'burning_glass/results'
 require 'burning_glass/errors'
 require 'burning_glass/options'
 require 'burning_glass/client'
